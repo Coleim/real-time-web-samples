@@ -1,0 +1,48 @@
+<!-- Standard empty html file -->
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Client</title>
+    </head>
+    <body>
+        <button onclick="feedDataToServer()">Feed data to server</button>
+        <h1>Server Response</h1>
+        <div id="response"></div>
+
+        <script>
+            getData()
+
+            async function getData() {
+                console.log( 'getData()')
+                const url = "/poll";
+                const response = await fetch(url);
+                // const json = await response.json();
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    // Decode and append the chunk to the output
+                    const chunk = decoder.decode(value, { stream: true });
+                    document.getElementById("response").innerHTML += JSON.stringify(chunk) + "<br>";
+                }
+            }
+
+            async function feedDataToServer() {
+                const url = "/feed";
+                const data = { value: Math.random() };
+                const options = {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                };
+                const response = await fetch(url, options);
+                const json = await response.json();
+            }
+
+        </script>
+    </body>
+</html>

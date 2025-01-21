@@ -6,17 +6,18 @@ let data = []
 
 app.use(express.json());
 
+
 app.get('/poll', (req, res) => {
+    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Transfer-Encoding', 'chunked');
+
     function checkForNewData() {
         console.log("checkForNewData: " , data)
         if (data.length > 0) {
-            res.json({ data })
+            res.write(JSON.stringify({ data }))
             data = []
-        } else {
-            // If no new data, continue polling after a short delay
-            console.log("No new data, checking again")
-            setTimeout(checkForNewData, 100);
         }
+        setTimeout(checkForNewData, 100);
     }
     // Start checking for new data
     checkForNewData();
