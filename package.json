@@ -5,7 +5,9 @@
   "scripts": {
     "polling": "node polling/server.js",
     "long-polling": "node long-polling/server.js",
-    "http-streaming": "node http-streaming/server.js"
+    "http-streaming": "node http-streaming/server.js",
+    "sse": "node sse/server.js",
+    "ws": "node websocket/server.js"
   },
   "author": "",
   "license": "ISC",
