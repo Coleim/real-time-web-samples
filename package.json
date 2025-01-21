@@ -1,0 +1,14 @@
+{
+  "name": "real-time-web-samples",
+  "version": "1.0.0",
+  "description": "Provide simple example for polling , sse and web sockets",
+  "scripts": {
+    "polling": "node polling/server.js",
+    "long-polling": "node long-polling/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

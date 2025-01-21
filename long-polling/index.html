@@ -1,0 +1,40 @@
+<!-- Standard empty html file -->
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Client</title>
+    </head>
+    <body>
+        <button onclick="feedDataToServer()">Feed data to server</button>
+        <h1>Server Response</h1>
+        <div id="response"></div>
+
+        <script>
+            getData()
+
+            async function getData() {
+                const url = "/poll";
+                const response = await fetch(url);
+                const json = await response.json();
+                document.getElementById("response").innerHTML += JSON.stringify(json) + "<br>";
+                getData();
+            }
+
+
+            async function feedDataToServer() {
+                const url = "/feed";
+                const data = { value: Math.random() };
+                const options = {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                };
+                const response = await fetch(url, options);
+                const json = await response.json();
+            }
+
+        </script>
+    </body>
+</html>
