@@ -1,0 +1,59 @@
+<!-- Standard empty html file -->
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Client</title>
+    </head>
+    <body>
+        <button onclick="feedDataToServer()">Feed data to server</button>
+        <h1>Server Response</h1>
+        <div id="response"></div>
+
+        <script>
+           
+            let socket
+            let intervalID
+            let tryingToConnect = false
+            function connectWebSocket() {
+              tryingToConnect = true
+              socket = new WebSocket('ws://localhost:3000');
+              socket.onmessage = function(event) {
+                document.getElementById('response').innerHTML += event.data + '<br>';
+              };
+
+              socket.onopen = function () {
+                console.info('Connected to server')
+                clearInterval(intervalID)
+              }
+              socket.onclose = function() {
+                console.warn('Disconnected. Trying to reconnect')
+                clearInterval(intervalID)
+                tryingToConnect = false
+                intervalID = setInterval( () => {
+                  if(!tryingToConnect) {
+                    connectWebSocket()
+                  }
+                }, 1000)
+              }
+            }
+
+            connectWebSocket()
+
+
+            async function feedDataToServer() {
+                const url = "/feed";
+                const data = { value: Math.random() };
+                const options = {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                };
+                const response = await fetch(url, options);
+                const json = await response.json();
+            }
+
+      </script>
+    </body>
+</html>

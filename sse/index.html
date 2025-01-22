@@ -1,0 +1,38 @@
+<!-- Standard empty html file -->
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Client</title>
+    </head>
+    <body>
+        <button onclick="feedDataToServer()">Feed data to server</button>
+        <h1>Server Response</h1>
+        <div id="response"></div>
+
+        <script>
+
+            const evtSource = new EventSource("/poll")
+            evtSource.onmessage = (event) => {
+              console.log( 'event received' )
+              console.log( event )
+              document.getElementById('response').innerHTML += event.data + '<br>'
+            } 
+
+
+            async function feedDataToServer() {
+                const url = "/feed";
+                const data = { value: Math.random() };
+                const options = {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                };
+                const response = await fetch(url, options);
+                const json = await response.json();
+            }
+
+      </script>
+    </body>
+</html>
